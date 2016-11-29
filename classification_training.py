@@ -8,14 +8,14 @@ from matplotlib.colors import ListedColormap
 from perceptron import Perceptron
 
 def ch2():
-    df = pd.read_csv("https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data", header=None)
+    # df = pd.read_csv("https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data", header=None)
+    df = pd.read_csv("http://mlr.cs.umass.edu/ml/machine-learning-databases/iris/iris.data", header=None)
     y = df.iloc[0:100, 4].values
     y = np.where(y == 'Iris-setosa', -1, 1)
     X = df.iloc[0:100, [0, 2]].values
     plt.scatter(X[:50, 0], X[:50, 1], color='red', marker='o', label='setosa')
     plt.scatter(X[50:100, 0], X[50:100, 1], color='blue', marker='x', label='versicolor')
     
-    # import pdb; pdb.set_trace()
     ppn = Perceptron(eta=0.1, n_iter=10)
     ppn.fit(X,y)
     plt.xlabel('sepal length [cm]')
