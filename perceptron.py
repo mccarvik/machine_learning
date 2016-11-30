@@ -1,4 +1,5 @@
 import numpy as np
+from helpers import update_check
 
 
 class Perceptron(object):
@@ -45,11 +46,12 @@ class Perceptron(object):
         for _ in range(self.n_iter):
             errors = 0
             for xi, target in zip(X, y):
+                temp = tuple(self.w_)
                 update = self.eta * (target - self.predict(xi))
-                # import pdb; pdb.set_trace()
-                # print(str(self.w_) + "----" + str(_))
                 self.w_[1:] += update * xi
                 self.w_[0] += update
+                if update_check(temp, self.w_):
+                    print(str(self.w_) + "----" + str(_))
                 errors += int(update != 0.0)
             self.errors_.append(errors)
         return self

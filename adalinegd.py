@@ -3,6 +3,8 @@ mpl.use('Agg')
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+from classification_training import plot_decision_regions
+from helpers import get_data
 
 class AdalineGD(object):
     """ADAptive LInear NEuron classifier
@@ -48,8 +50,11 @@ class AdalineGD(object):
         for i in range(self.n_iter):
             output = self.net_input(X)
             errors = (y - output)
+            temp = self.w_
             self.w_[1:] += self.eta * X.T.dot(errors)
             self.w_[0] += self.eta * errors.sum()
+            # if self.w_.all() != temp.all():
+            print(str(self.w_) + " ---- " + str(i))
             cost = (errors**2).sum() / 2.0
             self.cost_.append(cost)
         return self
@@ -65,13 +70,9 @@ class AdalineGD(object):
     def predict(self, X):
         """Return class label after unit step"""
         return np.where(self.activation(X) >= 0.0, 1, -1)
-        
-if __name__ == "__main__":
-    # import pdb; pdb.set_trace()
-    df = pd.read_csv("http://mlr.cs.umass.edu/ml/machine-learning-databases/iris/iris.data", header=None)
-    y = df.iloc[0:100, 4].values
-    y = np.where(y == 'Iris-setosa', -1, 1)
-    X = df.iloc[0:100, [0, 2]].values
+    
+def main1():
+    y,X = get_data()
     fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(8, 4))
     
     ada1 = AdalineGD(n_iter=10, eta=0.01).fit(X, y)
@@ -90,3 +91,37 @@ if __name__ == "__main__":
     plt.savefig("/home/ubuntu/workspace/machine_learning/png/ch2/adaline_1.png", dpi=300)
     plt.close()
     # plt.show()
+
+def main2():
+    y,X = get_data()
+    
+    # standardize features
+    X_std = np.copy(X)
+    X_std[:,0] = (X[:,0] - X[:,0].mean()) / X[:,0].std()
+    X_std[:,1] = (X[:,1] - X[:,1].mean()) / X[:,1].std()
+    
+    ada = AdalineGD(n_iter=15, eta=0.01)
+    ada.fit(X_std, y)
+    
+    plot_decision_regions(X_std, y, classifier=ada)
+    plt.title('Adaline - Gradient Descent')
+    plt.xlabel('sepal length [standardized]')
+    plt.ylabel('petal length [standardized]')
+    plt.legend(loc='upper left')
+    plt.tight_layout()
+    plt.savefig('/home/ubuntu/workspace/machine_learning/png/ch2/adaline_2.png', dpi=300)
+    plt.close()
+    
+    plt.plot(range(1, len(ada.cost_) + 1), ada.cost_, marker='o')
+    plt.xlabel('Epochs')
+    plt.ylabel('Sum-squared-error')
+    
+    plt.tight_layout()
+    plt.savefig('/home/ubuntu/workspace/machine_learning/png/ch2/adaline_3.png', dpi=300)
+    # plt.show()"
+
+if __name__ == "__main__":
+    # import pdb; pdb.set_trace()
+    # main1()
+    main2()
+    
