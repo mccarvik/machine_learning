@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 from classification_training import plot_decision_regions
-from helpers import get_data
+from helpers import get_data, update_check
 
 class AdalineGD(object):
     """ADAptive LInear NEuron classifier
@@ -50,11 +50,11 @@ class AdalineGD(object):
         for i in range(self.n_iter):
             output = self.net_input(X)
             errors = (y - output)
-            temp = self.w_
+            temp = tuple(self.w_)
             self.w_[1:] += self.eta * X.T.dot(errors)
             self.w_[0] += self.eta * errors.sum()
-            # if self.w_.all() != temp.all():
-            print(str(self.w_) + " ---- " + str(i))
+            if update_check(temp, self.w_):
+                print(str(self.w_) + "----" + str(i))
             cost = (errors**2).sum() / 2.0
             self.cost_.append(cost)
         return self
