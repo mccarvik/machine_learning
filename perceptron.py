@@ -42,8 +42,9 @@ class Perceptron(object):
         """
         self.w_ = np.zeros(1 + X.shape[1])
         self.errors_ = []
-
+        import pdb; pdb.set_trace()
         for _ in range(self.n_iter):
+            import pdb; pdb.set_trace()
             errors = 0
             for xi, target in zip(X, y):
                 temp = tuple(self.w_)

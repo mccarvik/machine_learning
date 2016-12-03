@@ -3,6 +3,7 @@ mpl.use('Agg')
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+from helpers import PIC_LOC
 
 from matplotlib.colors import ListedColormap
 from perceptron import Perceptron
@@ -22,14 +23,14 @@ def ch2():
     plt.ylabel('petal length [cm]')
     plt.legend(loc='upper left')
     plot_decision_regions(X, y, classifier=ppn)
-    plt.savefig("/home/ubuntu/workspace/machine_learning/png/ch2/iris_ch2.png")
+    plt.savefig(PIC_LOC + "iris_ch2.png")
     plt.close()
     # plt.show()
     
     plt.plot(range(1,len(ppn.errors_) + 1), ppn.errors_,marker='o')
     plt.xlabel('Epochs')
     plt.ylabel('Number of misclassifications')
-    plt.savefig("/home/ubuntu/workspace/machine_learning/png/ch2/iris2_ch2.png")
+    plt.savefig(PIC_LOC + "iris2_ch2.png")
     plt.close()
     
 

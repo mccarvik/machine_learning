@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 from classification_training import plot_decision_regions
-from helpers import get_data, update_check
+from helpers import get_data, update_check, PIC_LOC
 
 class AdalineGD(object):
     """ADAptive LInear NEuron classifier
@@ -46,8 +46,9 @@ class AdalineGD(object):
         """
         self.w_ = np.zeros(1 + X.shape[1])
         self.cost_ = []
-
+        import pdb; pdb.set_trace()
         for i in range(self.n_iter):
+            import pdb; pdb.set_trace()
             output = self.net_input(X)
             errors = (y - output)
             temp = tuple(self.w_)
@@ -109,7 +110,7 @@ def main2():
     plt.ylabel('petal length [standardized]')
     plt.legend(loc='upper left')
     plt.tight_layout()
-    plt.savefig('/home/ubuntu/workspace/machine_learning/png/ch2/adaline_2.png', dpi=300)
+    plt.savefig(PIC_LOC + 'adaline_2.png', dpi=300)
     plt.close()
     
     plt.plot(range(1, len(ada.cost_) + 1), ada.cost_, marker='o')
@@ -117,8 +118,9 @@ def main2():
     plt.ylabel('Sum-squared-error')
     
     plt.tight_layout()
-    plt.savefig('/home/ubuntu/workspace/machine_learning/png/ch2/adaline_3.png', dpi=300)
-    # plt.show()"
+    plt.savefig(PIC_LOC + 'adaline_3.png', dpi=300)
+    # plt.show()
+    plt.close()
 
 if __name__ == "__main__":
     # import pdb; pdb.set_trace()
