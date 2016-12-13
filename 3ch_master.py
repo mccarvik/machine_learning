@@ -9,6 +9,8 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.cross_validation import train_test_split
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier, export_graphviz
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.neighbors import KNeighborsClassifier
     
 def sigmoid(z):
     return 1.0 / (1.0 + np.exp(-z))
@@ -233,7 +235,50 @@ def build_dec_tree():
                   feature_names=['petal length', 'petal width'])
     
     # execute "dot -Tpng tree.dot -o tree.png" to turn file into png file
+
+def random_forests():
+    X, y = get_data_sklearn()
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
+    forest = RandomForestClassifier(criterion='entropy',
+                                  n_estimators=10, 
+                                  random_state=1,
+                                  n_jobs=2)
+    forest.fit(X_train, y_train)
+    X_combined = np.vstack((X_train, X_test))
+    y_combined = np.hstack((y_train, y_test))
+    plot_decision_regions(X_combined, y_combined, 
+                        classifier=forest, test_idx=range(105,150))
     
+    plt.xlabel('petal length [cm]')
+    plt.ylabel('petal width [cm]')
+    plt.legend(loc='upper left')
+    plt.tight_layout()
+    plt.savefig(PIC_LOC + 'random_forest.png', dpi=300)
+    # plt.show()"
+
+def KNN_model():
+    X, y = get_data_sklearn()
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
+    sc = StandardScaler()
+    sc.fit(X_train)
+    X_train_std = sc.transform(X_train)
+    X_test_std = sc.transform(X_test)
+    X_combined = np.vstack((X_train, X_test))
+    X_combined_std = np.vstack((X_train_std, X_test_std))
+    y_combined = np.hstack((y_train, y_test))
+    knn = KNeighborsClassifier(n_neighbors=5, p=2, metric='minkowski')
+    knn.fit(X_train_std, y_train)
+    
+    plot_decision_regions(X_combined_std, y_combined, 
+                        classifier=knn, test_idx=range(105,150))
+    
+    plt.xlabel('petal length [standardized]')
+    plt.ylabel('petal width [standardized]')
+    plt.legend(loc='upper left')
+    plt.tight_layout()
+    plt.savefig(PIC_LOC + 'k_nearest_neighbors.png', dpi=300)
+    # plt.show()
+
     
 if __name__ == "__main__":
     # import pdb; pdb.set_trace()
@@ -241,4 +286,6 @@ if __name__ == "__main__":
     # nonlinear_svm()
     # linear_svm()
     # dec_tree_impurity()
-    build_dec_tree()
+    # build_dec_tree()
+    # random_forests()
+    KNN_model()
