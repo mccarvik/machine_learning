@@ -157,6 +157,7 @@ class SBS():
         self.scores_ = [score]
     
         while dim > self.k_features:
+            import pdb; pdb.set_trace()
             scores = []
             subsets = []
     
@@ -271,5 +272,5 @@ if __name__ == "__main__":
     # csv_data()
     # cat_data()
     # part_dataset()
-    # knn_sbs()
-    random_forest_classifer()
+    knn_sbs()
+    # random_forest_classifer()
