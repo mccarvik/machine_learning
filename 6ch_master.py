@@ -11,6 +11,10 @@ from sklearn.decomposition import PCA
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 from sklearn.learning_curve import learning_curve, validation_curve
+from sklearn.grid_search import GridSearchCV
+from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score, make_scorer
 
 
 def hyper_paramater_tuning():
@@ -162,10 +166,106 @@ def addressing_over_under_fitting():
     plt.ylim([0.8, 1.0])
     plt.tight_layout()
     plt.savefig(PL6 + 'validation_curve.png', dpi=300)
+    
+def grid_search():
+    df = pd.read_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/breast-cancer-wisconsin/wdbc.data', header=None)
+    X = df.loc[:, 2:].values
+    y = df.loc[:, 1].values
+    le = LabelEncoder()
+    y = le.fit_transform(y)
+    le.transform(['M', 'B'])
+    X_train, X_test, y_train, y_test = \
+        train_test_split(X, y, test_size=0.20, random_state=1)
+    pipe_svc = Pipeline([('scl', StandardScaler()),
+                ('clf', SVC(random_state=1))])
+    
+    param_range = [0.0001, 0.001, 0.01, 0.1, 1.0, 10.0, 100.0, 1000.0]
+    
+    param_grid = [{'clf__C': param_range, 
+                   'clf__kernel': ['linear']},
+                     {'clf__C': param_range, 
+                      'clf__gamma': param_range, 
+                      'clf__kernel': ['rbf']}]
+    
+    gs = GridSearchCV(estimator=pipe_svc, 
+                      param_grid=param_grid, 
+                      scoring='accuracy', 
+                      cv=10,
+                      n_jobs=-1)
+    gs = gs.fit(X_train, y_train)
+    print(gs.best_score_)
+    print(gs.best_params_)
+    clf = gs.best_estimator_
+    clf.fit(X_train, y_train)
+    print('Test accuracy: %.3f' % clf.score(X_test, y_test))
+    
+    gs = GridSearchCV(estimator=pipe_svc, 
+                                param_grid=param_grid, 
+                                scoring='accuracy', 
+                                cv=2)
+    scores = cross_val_score(gs, X_train, y_train, scoring='accuracy', cv=5)
+    print('CV accuracy: %.3f +/- %.3f' % (np.mean(scores), np.std(scores)))
+    
+    gs = GridSearchCV(estimator=DecisionTreeClassifier(random_state=0), 
+                                param_grid=[{'max_depth': [1, 2, 3, 4, 5, 6, 7, None]}], 
+                                scoring='accuracy', 
+                                cv=2)
+    scores = cross_val_score(gs, X_train, y_train, scoring='accuracy', cv=5)
+    print('CV accuracy: %.3f +/- %.3f' % (np.mean(scores), np.std(scores)))
+
+def performance_evaluation():
+    df = pd.read_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/breast-cancer-wisconsin/wdbc.data', header=None)
+    X = df.loc[:, 2:].values
+    y = df.loc[:, 1].values
+    le = LabelEncoder()
+    y = le.fit_transform(y)
+    le.transform(['M', 'B'])
+    X_train, X_test, y_train, y_test = \
+        train_test_split(X, y, test_size=0.20, random_state=1)
+    pipe_svc = Pipeline([('scl', StandardScaler()),
+            ('clf', SVC(random_state=1))])
+        
+    pipe_svc.fit(X_train, y_train)
+    y_pred = pipe_svc.predict(X_test)
+    confmat = confusion_matrix(y_true=y_test, y_pred=y_pred)
+    print(confmat)
+
+    fig, ax = plt.subplots(figsize=(2.5, 2.5))
+    ax.matshow(confmat, cmap=plt.cm.Blues, alpha=0.3)
+    for i in range(confmat.shape[0]):
+        for j in range(confmat.shape[1]):
+            ax.text(x=j, y=i, s=confmat[i, j], va='center', ha='center')
+    plt.xlabel('predicted label')
+    plt.ylabel('true label')
+    plt.tight_layout()
+    plt.savefig(PL6 + 'confusion_matrix.png', dpi=300)
+    plt.close()
+    
+    print('Precision: %.3f' % precision_score(y_true=y_test, y_pred=y_pred))
+    print('Recall: %.3f' % recall_score(y_true=y_test, y_pred=y_pred))
+    print('F1: %.3f' % f1_score(y_true=y_test, y_pred=y_pred))
+    
+
+    scorer = make_scorer(f1_score, pos_label=0)
+    c_gamma_range = [0.01, 0.1, 1.0, 10.0]
+    param_grid = [{'clf__C': c_gamma_range, 
+                   'clf__kernel': ['linear']},
+                     {'clf__C': c_gamma_range, 
+                      'clf__gamma': c_gamma_range, 
+                      'clf__kernel': ['rbf'],}]
+    gs = GridSearchCV(estimator=pipe_svc, 
+                                    param_grid=param_grid, 
+                                    scoring=scorer, 
+                                    cv=10,
+                                    n_jobs=-1)
+    gs = gs.fit(X_train, y_train)
+    print(gs.best_score_)
+    print(gs.best_params_)
 
 if __name__ == "__main__":
     # hyper_paramater_tuning()
     # kfold_cross_validation()
     # debug_variance_and_bias()
-    addressing_over_under_fitting()
-    
+    # addressing_over_under_fitting()
+    # grid_search()
+    performance_evaluation()
