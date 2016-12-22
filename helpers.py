@@ -10,6 +10,7 @@ PIC_LOC = '/home/ubuntu/workspace/machine_learning/png/'
 PL4 = '/home/ubuntu/workspace/machine_learning/ch4_png/'
 PL5 = '/home/ubuntu/workspace/machine_learning/ch5_png/'
 PL6 = '/home/ubuntu/workspace/machine_learning/ch6_png/'
+PL7 = '/home/ubuntu/workspace/machine_learning/ch7_png/'
 
 def get_data():
     df = pd.read_csv("http://mlr.cs.umass.edu/ml/machine-learning-databases/iris/iris.data", header=None)
