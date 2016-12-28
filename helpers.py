@@ -11,6 +11,8 @@ PL4 = '/home/ubuntu/workspace/machine_learning/ch4_png/'
 PL5 = '/home/ubuntu/workspace/machine_learning/ch5_png/'
 PL6 = '/home/ubuntu/workspace/machine_learning/ch6_png/'
 PL7 = '/home/ubuntu/workspace/machine_learning/ch7_png/'
+PL8 = '/home/ubuntu/workspace/machine_learning/ch8_png/'
+PL9 = '/home/ubuntu/workspace/machine_learning/ch9_png/'
 
 def get_data():
     df = pd.read_csv("http://mlr.cs.umass.edu/ml/machine-learning-databases/iris/iris.data", header=None)

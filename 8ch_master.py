@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
-from helpers import PL7, plot_decision_regions
+from helpers import PL8, plot_decision_regions
 import pyprind
 import os
 import re
@@ -14,7 +14,7 @@ from nltk.corpus import stopwords
 from sklearn.grid_search import GridSearchCV
 from sklearn.pipeline import Pipeline
 from sklearn.linear_model import LogisticRegression, SGDClassifier
-from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer, TfidfVectorizer, HashingVectorizer    
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer, TfidfVectorizer, HashingVectorizer 
 
 
 def sentiment_analysis():
@@ -107,7 +107,7 @@ def out_of_core():
     vect = HashingVectorizer(decode_error='ignore',     
                              n_features=2**21,    
                              preprocessor=None,     
-                             tokenizer=tokenizer)    
+                             tokenizer=tokenizer_new)    
     clf = SGDClassifier(loss='log', random_state=1, n_iter=1)    
     doc_stream = stream_docs(path='./movie_data.csv')
     pbar = pyprind.ProgBar(45)    
