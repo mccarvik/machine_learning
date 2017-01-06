@@ -5,9 +5,11 @@ mpl.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib import cm
 from helpers import PL11, plot_decision_regions
-from sklearn.datasets import make_blobs
-from sklearn.cluster import KMeans
+from sklearn.datasets import make_blobs, make_moons
+from sklearn.cluster import KMeans, AgglomerativeClustering, DBSCAN
 from sklearn.metrics import silhouette_samples
+from scipy.spatial.distance import pdist,squareform
+from scipy.cluster.hierarchy import linkage, dendrogram
 
 
 def k_means():
@@ -174,10 +176,95 @@ def silhouette():
     plt.tight_layout()
     plt.savefig(PL11 + 'silhouette_bad.png', dpi=300)
 
+def hierarchial_tree():
+    np.random.seed(123)
+    variables = ['X', 'Y', 'Z']
+    labels = ['ID_0','ID_1','ID_2','ID_3','ID_4']
+    X = np.random.random_sample([5,3])*10
+    df = pd.DataFrame(X, columns=variables, index=labels)
+    row_clusters = linkage(df.values, method='complete', metric='euclidean')
+    pd.DataFrame(row_clusters,
+                 columns=['row label 1', 'row label 2', 'distance', 'no. of items in clust.'],
+                 index=['cluster %d' %(i+1) for i in range(row_clusters.shape[0])])
 
+    # make dendrogram black (part 1/2)
+    # from scipy.cluster.hierarchy import set_link_color_palette
+    # set_link_color_palette(['black'])
+    row_dendr = dendrogram(row_clusters, 
+                           labels=labels,
+                           # make dendrogram black (part 2/2)
+                           # color_threshold=np.inf
+                           )
+    plt.tight_layout()
+    plt.ylabel('Euclidean distance')
+    plt.savefig(PL11 + 'dendrogram.png', dpi=300, bbox_inches='tight')
+    plt.close()
+    
+    # plot row dendrogram
+    fig = plt.figure(figsize=(8,8), facecolor='white')
+    axd = fig.add_axes([0.09,0.1,0.2,0.6])
+    
+    # note: for matplotlib < v1.5.1, please use orientation='right'
+    row_dendr = dendrogram(row_clusters, orientation='left')
+    
+    # reorder data with respect to clustering
+    df_rowclust = df.ix[row_dendr['leaves'][::-1]]
+    axd.set_xticks([])
+    axd.set_yticks([])
+    
+    # remove axes spines from dendrogram
+    for i in axd.spines.values():
+            i.set_visible(False)
+    
+    # plot heatmap
+    axm = fig.add_axes([0.23,0.1,0.6,0.6]) # x-pos, y-pos, width, height
+    cax = axm.matshow(df_rowclust, interpolation='nearest', cmap='hot_r')
+    fig.colorbar(cax)
+    axm.set_xticklabels([''] + list(df_rowclust.columns))
+    axm.set_yticklabels([''] + list(df_rowclust.index))
+    plt.savefig(PL11 + 'heatmap.png', dpi=300)
+    
+    ac = AgglomerativeClustering(n_clusters=3, affinity='euclidean', linkage='complete')
+    labels = ac.fit_predict(X)
+    print('Cluster labels: %s' % labels)
+
+def dbscan():
+    X, y = make_moons(n_samples=200, noise=0.05, random_state=0)
+    plt.scatter(X[:,0], X[:,1])
+    plt.tight_layout()
+    plt.savefig(PL11 + 'moons.png', dpi=300)
+    plt.show()
+    plt.close()
+    
+    f, (ax1, ax2) = plt.subplots(1, 2, figsize=(8,3))
+    km = KMeans(n_clusters=2, random_state=0)
+    y_km = km.fit_predict(X)
+    ax1.scatter(X[y_km==0,0], X[y_km==0,1], c='lightblue', marker='o', s=40, label='cluster 1')
+    ax1.scatter(X[y_km==1,0], X[y_km==1,1], c='red', marker='s', s=40, label='cluster 2')
+    ax1.set_title('K-means clustering')
+    
+    ac = AgglomerativeClustering(n_clusters=2, affinity='euclidean', linkage='complete')
+    y_ac = ac.fit_predict(X)
+    ax2.scatter(X[y_ac==0,0], X[y_ac==0,1], c='lightblue', marker='o', s=40, label='cluster 1')
+    ax2.scatter(X[y_ac==1,0], X[y_ac==1,1], c='red', marker='s', s=40, label='cluster 2')
+    ax2.set_title('Agglomerative clustering')
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(PL11 + 'kmeans_and_ac.png', dpi=300)
+    plt.close()
+    
+    db = DBSCAN(eps=0.2, min_samples=5, metric='euclidean')
+    y_db = db.fit_predict(X)
+    plt.scatter(X[y_db==0,0], X[y_db==0,1], c='lightblue', marker='o', s=40, label='cluster 1')
+    plt.scatter(X[y_db==1,0], X[y_db==1,1], c='red', marker='s', s=40, label='cluster 2')
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(PL11 + 'moons_dbscan.png', dpi=300)
 
 if __name__ == "__main__":
     # import pdb; pdb.set_trace()
     # k_means()
     # elbow()
-    silhouette()
+    # silhouette()
+    # hierarchial_tree()
+    dbscan()
