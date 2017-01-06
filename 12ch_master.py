@@ -38,6 +38,17 @@ def orig_train():
     ax[0].set_yticks([])
     plt.tight_layout()
     plt.savefig(PL12 + 'mnist_all.png', dpi=300)
+    plt.close()
+    
+    fig, ax = plt.subplots(nrows=5, ncols=5, sharex=True, sharey=True,)
+    ax = ax.flatten()
+    for i in range(25):
+        img = X_train[y_train == 7][i].reshape(28, 28)
+        ax[i].imshow(img, cmap='Greys', interpolation='nearest')
+    ax[0].set_xticks([])
+    ax[0].set_yticks([])
+    plt.tight_layout()
+    plt.savefig(PL12 + 'mnist_7.png', dpi=300)
 
 
 if __name__ == "__main__":
