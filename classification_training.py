@@ -4,11 +4,13 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 from helpers import PIC_LOC
+import pdb
 
 from matplotlib.colors import ListedColormap
 from perceptron import Perceptron
 
 def ch2():
+    pdb.set_trace()
     # df = pd.read_csv("https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data", header=None)
     df = pd.read_csv("http://mlr.cs.umass.edu/ml/machine-learning-databases/iris/iris.data", header=None)
     y = df.iloc[0:100, 4].values
