@@ -10,7 +10,6 @@ from matplotlib.colors import ListedColormap
 from perceptron import Perceptron
 
 def ch2():
-    pdb.set_trace()
     # df = pd.read_csv("https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data", header=None)
     df = pd.read_csv("http://mlr.cs.umass.edu/ml/machine-learning-databases/iris/iris.data", header=None)
     y = df.iloc[0:100, 4].values
@@ -20,6 +19,7 @@ def ch2():
     plt.scatter(X[50:100, 0], X[50:100, 1], color='blue', marker='x', label='versicolor')
     
     ppn = Perceptron(eta=0.1, n_iter=10)
+    pdb.set_trace()
     ppn.fit(X,y)
     plt.xlabel('sepal length [cm]')
     plt.ylabel('petal length [cm]')
