@@ -1,3 +1,4 @@
+import pdb
 import pandas as pd
 import numpy as np
 import matplotlib as mpl
@@ -56,8 +57,6 @@ def cat_data():
     df['classlabel'] = df['classlabel'].map(inv_size_mapping)
     # print(df)
     
-    
-    
     class_le = LabelEncoder()
     y = class_le.fit_transform(df['classlabel'].values)
     # print(y)
@@ -85,6 +84,7 @@ def part_dataset():
     X_train, X_test, y_train, y_test = \
           train_test_split(X, y, test_size=0.3, random_state=0)
     
+    pdb.set_trace()
     # Normalization of the data
     mms = MinMaxScaler()
     X_train_norm = mms.fit_transform(X_train)
@@ -268,9 +268,8 @@ def random_forest_classifer():
     print(X_selected.shape)
 
 if __name__ == "__main__":
-    # import pdb; pdb.set_trace()
     # csv_data()
     # cat_data()
-    # part_dataset()
-    knn_sbs()
+    part_dataset()
+    # knn_sbs()
     # random_forest_classifer()
