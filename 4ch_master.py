@@ -33,6 +33,7 @@ def csv_data():
     print(imputed_data)
 
 def cat_data():
+    pdb.set_trace()
     df = pd.DataFrame([
               ['green', 'M', 10.1, 'class1'], 
               ['red', 'L', 13.5, 'class2'], 
@@ -84,7 +85,6 @@ def part_dataset():
     X_train, X_test, y_train, y_test = \
           train_test_split(X, y, test_size=0.3, random_state=0)
     
-    pdb.set_trace()
     # Normalization of the data
     mms = MinMaxScaler()
     X_train_norm = mms.fit_transform(X_train)
@@ -95,6 +95,7 @@ def part_dataset():
     X_train_std = stdsc.fit_transform(X_train)
     X_test_std = stdsc.transform(X_test)
     
+    pdb.set_trace()
     lr = LogisticRegression(penalty='l1', C=0.1)
     lr.fit(X_train_std, y_train)
     # print('Training accuracy:', lr.score(X_train_std, y_train))
