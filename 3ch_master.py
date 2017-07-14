@@ -1,3 +1,4 @@
+import sys, pdb
 import numpy as np
 import matplotlib as mpl
 mpl.use('Agg')
@@ -47,6 +48,7 @@ def main2():
     lr = LogisticRegression(C=1000.0, random_state=0)
     lr.fit(X_train_std, y_train)
     
+    pdb.set_trace()
     plot_decision_regions(X_combined_std, y_combined,
                           classifier=lr, test_idx=range(105, 150))
     plt.xlabel('petal length [standardized]')
@@ -281,6 +283,7 @@ def KNN_model():
 
     
 if __name__ == "__main__":
+    main2()
     # import pdb; pdb.set_trace()
     # support_vector_machines()
     # nonlinear_svm()
@@ -288,4 +291,4 @@ if __name__ == "__main__":
     # dec_tree_impurity()
     # build_dec_tree()
     # random_forests()
-    KNN_model()
+    # KNN_model()
