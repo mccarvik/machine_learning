@@ -1,3 +1,4 @@
+import pdb
 import numpy as np
 from helpers import update_check
 
@@ -40,27 +41,36 @@ class Perceptron(object):
         self : object
 
         """
+        # set weights to zero
         self.w_ = np.zeros(1 + X.shape[1])
         self.errors_ = []
-        import pdb; pdb.set_trace()
+        # loop through the data n_iter amount of times
         for _ in range(self.n_iter):
-            import pdb; pdb.set_trace()
             errors = 0
             for xi, target in zip(X, y):
                 temp = tuple(self.w_)
+                # update only occurs if prediction is wrong
                 update = self.eta * (target - self.predict(xi))
+                if update != 0:
+                    pdb.set_trace()
+                    print()
+                # update each coefficient weight by amount prediction was off (update) * learning rate (eta)  * factor value (xi)
                 self.w_[1:] += update * xi
+                # update intercept by amount prediction was off * learning rate
                 self.w_[0] += update
                 if update_check(temp, self.w_):
                     print(str(self.w_) + "----" + str(_))
+                # keeps track of how many mistakes per epoch
                 errors += int(update != 0.0)
             self.errors_.append(errors)
         return self
 
     def net_input(self, X):
         """Calculate net input"""
+        # simply multiples weights by factors --> = w1x1 + w2x2 + ... + w0
         return np.dot(X, self.w_[1:]) + self.w_[0]
 
     def predict(self, X):
         """Return class label after unit step"""
+        # binary classifier
         return np.where(self.net_input(X) >= 0.0, 1, -1)

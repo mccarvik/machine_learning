@@ -19,7 +19,6 @@ def ch2():
     plt.scatter(X[50:100, 0], X[50:100, 1], color='blue', marker='x', label='versicolor')
     
     ppn = Perceptron(eta=0.1, n_iter=10)
-    pdb.set_trace()
     ppn.fit(X,y)
     plt.xlabel('sepal length [cm]')
     plt.ylabel('petal length [cm]')
@@ -27,7 +26,6 @@ def ch2():
     plot_decision_regions(X, y, classifier=ppn)
     plt.savefig(PIC_LOC + "iris_ch2.png")
     plt.close()
-    # plt.show()
     
     plt.plot(range(1,len(ppn.errors_) + 1), ppn.errors_,marker='o')
     plt.xlabel('Epochs')
@@ -62,5 +60,4 @@ def plot_decision_regions(X, y, classifier, resolution=0.02):
 
 
 if __name__ == "__main__":
-    # import pdb; pdb.set_trace()
     ch2()

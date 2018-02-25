@@ -1,3 +1,4 @@
+import pdb
 import pandas as pd
 import numpy as np
 import matplotlib as mpl
@@ -216,7 +217,8 @@ def lda_scikit():
     X_train_std = sc.fit_transform(X_train)
     X_test_std = sc.transform(X_test)
     
-    lda = LDA(n_components=2)
+    pdb.set_trace()
+    lda = LDA(n_components=3)
     X_train_lda = lda.fit_transform(X_train_std, y_train)
     lr = LogisticRegression()
     lr = lr.fit(X_train_lda, y_train)
@@ -439,8 +441,8 @@ if __name__ == "__main__":
     # tot_vs_explained_var()
     # pca_scikit()
     # linear_discriminant_analysis()
-    # lda_scikit()
+    lda_scikit()
     # half_moon_kernel_pca()
     # circles_kernel_pca()
     # project_new_data_kernel_pca()
-    scikit_kernel_pca()
+    # scikit_kernel_pca()

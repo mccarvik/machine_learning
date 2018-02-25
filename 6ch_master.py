@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib as mpl
 mpl.use('Agg')
+import pdb
 import matplotlib.pyplot as plt
 from helpers import PL6, plot_decision_regions
 from sklearn.preprocessing import LabelEncoder
@@ -83,6 +84,7 @@ def debug_variance_and_bias():
     pipe_lr = Pipeline([('scl', StandardScaler()),
             ('clf', LogisticRegression(penalty='l2', random_state=0))])
 
+    pdb.set_trace()
     train_sizes, train_scores, test_scores = \
                 learning_curve(estimator=pipe_lr, 
                 X=X_train, 
@@ -342,8 +344,8 @@ if __name__ == "__main__":
     # import pdb; pdb.set_trace()
     # hyper_paramater_tuning()
     # kfold_cross_validation()
-    # debug_variance_and_bias()
+    debug_variance_and_bias()
     # addressing_over_under_fitting()
     # grid_search()
     # performance_evaluation()
-    receiver_operating_characteristic()
+    # receiver_operating_characteristic()

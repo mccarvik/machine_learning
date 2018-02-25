@@ -77,6 +77,7 @@ def exploratory_data_analysis():
     print('Slope: %.3f' % slr.coef_[0])
     print('Intercept: %.3f' % slr.intercept_)
     
+    import pdb; pdb.set_trace()
     lin_regplot(X, y, slr)
     plt.xlabel('Average number of rooms [RM]')
     plt.ylabel('Price in $1000\'s [MEDV]')
@@ -384,9 +385,9 @@ def random_forest():
     
 if __name__ == "__main__":
     # import pdb; pdb.set_trace()
-    # exploratory_data_analysis()
+    exploratory_data_analysis()
     # ransac()
     # performance()
     # polynomial_regression()
     # nonlinear()
-    random_forest()
+    # random_forest()
