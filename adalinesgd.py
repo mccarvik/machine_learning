@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib as mpl
 mpl.use('Agg')
+import pdb
 import pandas as pd
 import matplotlib.pyplot as plt
 from numpy.random import seed
@@ -55,7 +56,6 @@ class AdalineSGD(object):
         """
         self._initialize_weights(X.shape[1])
         self.cost_ = []
-        import pdb; pdb.set_trace()
         for i in range(self.n_iter):
             if self.shuffle:
                 X, y = self._shuffle(X, y)
@@ -63,7 +63,6 @@ class AdalineSGD(object):
             for xi, target in zip(X, y):
                 cost.append(self._update_weights(xi, target))
             avg_cost = sum(cost)/len(y)
-            import pdb; pdb.set_trace()
             self.cost_.append(avg_cost)
         return self
 
@@ -138,5 +137,4 @@ def main():
    
    
 if __name__ == "__main__":
-    # import pdb; pdb.set_trace()
     main()

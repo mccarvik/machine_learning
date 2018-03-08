@@ -1,3 +1,4 @@
+import pdb
 import matplotlib as mpl
 mpl.use('Agg')
 import pandas as pd
@@ -44,11 +45,10 @@ class AdalineGD(object):
         self : object
 
         """
+        
         self.w_ = np.zeros(1 + X.shape[1])
         self.cost_ = []
-        import pdb; pdb.set_trace()
         for i in range(self.n_iter):
-            import pdb; pdb.set_trace()
             output = self.net_input(X)
             errors = (y - output)
             temp = tuple(self.w_)
